@@ -6,6 +6,8 @@ It outlived the dinosaurs, the Romans, and the investor's last three
 startups, and it is the only unicorn that is actually a bird.
 """
 
+import os
+
 LINE = "We outlived the dinosaurs, the Romans, and your last three startups — invest in the only unicorn that's actually a bird. We never pivot, we just migrate."
 
 
@@ -28,10 +30,20 @@ def validate(line: str) -> None:
 
 def main() -> None:
     validate(LINE)
-    with open("entry.txt", "w", encoding="utf-8") as f:
+    # The grader mounts the repo read-only at /bot and gives us one writable
+    # directory, named by MAKEFUN_OUTPUT_DIR ("/output"); a relative
+    # "entry.txt" would fail there with a permission error. Write there.
+    out_dir = (
+        os.environ.get("MAKEFUN_OUTPUT_DIR")
+        or os.environ.get("OUTPUT_DIR")
+        or "/output"
+    )
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, "entry.txt")
+    with open(path, "w", encoding="utf-8") as f:
         f.write(LINE)
     print(LINE)
-    print(f"({len(LINE)} characters)")
+    print(f"({len(LINE)} characters -> {path})")
 
 
 if __name__ == "__main__":
